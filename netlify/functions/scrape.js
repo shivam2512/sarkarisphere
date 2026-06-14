@@ -33,6 +33,24 @@ exports.handler = async function (event, context) {
     $('header, footer, nav, .header, .footer, .site-header, .site-footer, .navbar').remove();
     $('#header, #footer, #nav, #navbar, #sidebar, .sidebar, #menu, .menu').remove();
 
+    // Remove competitor's social links (Telegram/WhatsApp)
+    $('a').each((_, el) => {
+      const href = ($(el).attr('href') || '').toLowerCase();
+      const text = $(el).text().toLowerCase();
+      if (href.includes('t.me') || href.includes('telegram') || href.includes('whatsapp') || text.includes('telegram') || text.includes('whatsapp')) {
+        // Remove the parent element if it only contains this link to avoid empty spaces
+        const parent = $(el).parent();
+        if (parent.text().trim() === $(el).text().trim()) {
+          parent.remove();
+        } else {
+          $(el).remove();
+        }
+      }
+    });
+
+    // Normalize all elements to create a proper single format
+    $('*').removeAttr('style').removeAttr('width').removeAttr('height').removeAttr('bgcolor').removeAttr('color').removeAttr('align').removeAttr('valign');
+
     let contentHtml = '';
 
     if (targetUrl.includes('sarkariresult.com')) {
