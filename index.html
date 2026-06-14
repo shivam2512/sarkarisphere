@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SarkariSphere | Sarkari Result, Sarkari Naukri 2026</title>
+  <meta name="description" content="SarkariSphere provides latest Sarkari Result, Jobs, Online Form, Admit Card, Results 2026 at one place. सरकारी रिजल्ट">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <span>📢 Live Updates: Govt Jobs, Results, Admit Cards updated every 30 minutes</span>
+      <span id="live-clock"></span>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div class="logo-icon-wrap">🇮🇳</div>
+        <div class="logo-text-wrap">
+          <div class="logo-title">SarkariSphere</div>
+          <div class="logo-sub">Sarkari Result | Naukri | Admit Card</div>
+        </div>
+      </div>
+      <div class="header-search">
+        <input type="text" id="search-input" placeholder="Search job, exam, result...">
+        <button id="search-btn">🔍 Search</button>
+      </div>
+    </div>
+    <!-- Nav -->
+    <nav class="main-nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-item active-nav" onclick="App.filterByCategory('all'); return false;">🏠 Home</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('latestjob'); return false;">📋 Latest Jobs</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('result'); return false;">📊 Result</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('admitcard'); return false;">🎫 Admit Card</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('upsc'); return false;">🏛️ UPSC</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('banking'); return false;">🏦 Banking</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('railways'); return false;">🚂 Railway</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('ssc'); return false;">📜 SSC</a>
+        <a href="#" class="nav-item" onclick="App.filterByCategory('defense'); return false;">🛡️ Defence</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">🔴 LIVE</div>
+    <div class="ticker-content">
+      <div class="ticker-track" id="ticker-track">Loading latest updates...</div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="page-wrapper">
+    <div class="main-container">
+
+      <!-- Left: Main Content -->
+      <main class="content-area">
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-num" id="stat-jobs">--</span>
+            <span class="stat-label">Active Jobs</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-results">--</span>
+            <span class="stat-label">Results</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-admit">--</span>
+            <span class="stat-label">Admit Cards</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">24/7</span>
+            <span class="stat-label">Auto Updated</span>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="filter-row">
+          <button class="chip active" data-cat="all" onclick="App.filterByCategory('all')">All</button>
+          <button class="chip" data-cat="result" onclick="App.filterByCategory('result')">Results</button>
+          <button class="chip" data-cat="admitcard" onclick="App.filterByCategory('admitcard')">Admit Cards</button>
+          <button class="chip" data-cat="upsc" onclick="App.filterByCategory('upsc')">UPSC</button>
+          <button class="chip" data-cat="ssc" onclick="App.filterByCategory('ssc')">SSC</button>
+          <button class="chip" data-cat="banking" onclick="App.filterByCategory('banking')">Banking</button>
+          <button class="chip" data-cat="railways" onclick="App.filterByCategory('railways')">Railway</button>
+          <button class="chip" data-cat="defense" onclick="App.filterByCategory('defense')">Defence</button>
+          <button class="chip" data-cat="psu" onclick="App.filterByCategory('psu')">PSU</button>
+        </div>
+
+        <!-- Boards Grid: 3 columns like SarkariResult -->
+        <div class="boards-grid" id="boards-grid">
+          <!-- Board: Latest Jobs -->
+          <div class="board" id="board-latestjob">
+            <div class="board-header bh-orange">📋 Latest Jobs <span class="board-count" id="count-latestjob"></span></div>
+            <ul class="board-list" id="list-latestjob">
+              <li class="loading-row">⏳ Fetching latest jobs...</li>
+            </ul>
+          </div>
+
+          <!-- Board: Results -->
+          <div class="board" id="board-result">
+            <div class="board-header bh-green">📊 Latest Results <span class="board-count" id="count-result"></span></div>
+            <ul class="board-list" id="list-result">
+              <li class="loading-row">⏳ Fetching results...</li>
+            </ul>
+          </div>
+
+          <!-- Board: Admit Cards -->
+          <div class="board" id="board-admitcard">
+            <div class="board-header bh-blue">🎫 Admit Cards <span class="board-count" id="count-admitcard"></span></div>
+            <ul class="board-list" id="list-admitcard">
+              <li class="loading-row">⏳ Fetching admit cards...</li>
+            </ul>
+          </div>
+
+          <!-- Board: UPSC -->
+          <div class="board" id="board-upsc">
+            <div class="board-header bh-red">🏛️ UPSC / Civil Services <span class="board-count" id="count-upsc"></span></div>
+            <ul class="board-list" id="list-upsc">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+
+          <!-- Board: Banking -->
+          <div class="board" id="board-banking">
+            <div class="board-header bh-teal">🏦 Banking / IBPS <span class="board-count" id="count-banking"></span></div>
+            <ul class="board-list" id="list-banking">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+
+          <!-- Board: Railway -->
+          <div class="board" id="board-railways">
+            <div class="board-header bh-purple">🚂 Railway / RRB <span class="board-count" id="count-railways"></span></div>
+            <ul class="board-list" id="list-railways">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+
+          <!-- Board: SSC -->
+          <div class="board" id="board-ssc">
+            <div class="board-header bh-yellow">📜 SSC / State PSC <span class="board-count" id="count-ssc"></span></div>
+            <ul class="board-list" id="list-ssc">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+
+          <!-- Board: Defence -->
+          <div class="board" id="board-defense">
+            <div class="board-header bh-dark">🛡️ Defence / Police <span class="board-count" id="count-defense"></span></div>
+            <ul class="board-list" id="list-defense">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+
+          <!-- Board: PSU -->
+          <div class="board" id="board-psu">
+            <div class="board-header bh-indigo">🏭 PSU & Others <span class="board-count" id="count-psu"></span></div>
+            <ul class="board-list" id="list-psu">
+              <li class="loading-row">⏳ Loading...</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Filtered View (shown when a filter is active) -->
+        <div class="filtered-view" id="filtered-view" style="display:none;">
+          <div class="filtered-header">
+            <span id="filtered-title">All Jobs</span>
+            <button class="back-btn" onclick="App.showAllBoards()">← Back to All</button>
+          </div>
+          <ul class="board-list full-list" id="filtered-list"></ul>
+          <button class="load-more-btn" id="load-more-btn" style="display:none" onclick="App.loadMoreFiltered()">Load More ↓</button>
+        </div>
+
+      </main>
+
+      <!-- Right: Sidebar -->
+      <aside class="sidebar">
+
+        <!-- Quick Links -->
+        <div class="sidebar-box">
+          <div class="sidebar-box-header">🔗 Quick Links</div>
+          <ul class="quick-links">
+            <li><a href="#" onclick="App.filterByCategory('upsc'); return false;">📌 UPSC Recruitment 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('ssc'); return false;">📌 SSC Recruitment 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('banking'); return false;">📌 Bank Jobs 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('railways'); return false;">📌 Railway Jobs 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('defense'); return false;">📌 Defence Jobs 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('result'); return false;">📌 Latest Results 2026</a></li>
+            <li><a href="#" onclick="App.filterByCategory('admitcard'); return false;">📌 Admit Cards 2026</a></li>
+          </ul>
+        </div>
+
+        <!-- Ad Slot -->
+        <div class="sidebar-box ad-box">
+          <div class="sidebar-box-header">Advertisement</div>
+          <div class="ad-placeholder">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+                 data-ad-slot="0987654321"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <div class="ad-fallback">📢 Advertise Here<br><small>Contact us for premium placement</small></div>
+          </div>
+        </div>
+
+        <!-- Trending Exams -->
+        <div class="sidebar-box">
+          <div class="sidebar-box-header">🔥 Trending Exams</div>
+          <ul class="quick-links">
+            <li><a href="#">UPSC Civil Services 2026</a></li>
+            <li><a href="#">SSC CGL 2026</a></li>
+            <li><a href="#">SBI PO 2026</a></li>
+            <li><a href="#">RRB NTPC 2026</a></li>
+            <li><a href="#">IBPS PO 2026</a></li>
+            <li><a href="#">NDA 2026</a></li>
+            <li><a href="#">CTET 2026</a></li>
+          </ul>
+        </div>
+
+        <!-- Alert Subscription -->
+        <div class="sidebar-box alert-box">
+          <div class="sidebar-box-header">🔔 Get Job Alerts</div>
+          <p class="alert-text">Get personalized Sarkari Naukri alerts in your inbox!</p>
+          <form class="alert-form" onsubmit="event.preventDefault(); showToast('Subscribed! You will receive job alerts.', 'success'); this.reset();">
+            <input type="email" class="alert-email" placeholder="Your email address" required>
+            <button type="submit" class="alert-submit">Subscribe Free</button>
+          </form>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="footer-title">🇮🇳 SarkariSphere</div>
+        <p>India's automated Sarkari Naukri portal. Get real-time government job updates, results, and admit cards.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-title">Categories</div>
+        <ul class="footer-links">
+          <li><a href="#">UPSC Jobs</a></li>
+          <li><a href="#">SSC Jobs</a></li>
+          <li><a href="#">Banking Jobs</a></li>
+          <li><a href="#">Railway Jobs</a></li>
+          <li><a href="#">Defence Jobs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-title">Information</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Disclaimer</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 SarkariSphere. All Rights Reserved. | Disclaimer: We aggregate publicly available data. Always verify from official sources.</p>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Native In-App Job Viewer Modal -->
+  <div class="job-viewer-overlay" id="job-viewer">
+    <div class="job-viewer-container">
+      <div class="job-viewer-header">
+        <button class="jv-back-btn" onclick="App.closeJobViewer()">
+          <span>&#8592;</span> Back to Dashboard
+        </button>
+        <div class="jv-title-area">
+          <h2 id="jv-title">Loading Job Details...</h2>
+        </div>
+        <button class="jv-share-btn" onclick="App.shareJob()">
+          <span>🔗</span> Share
+        </button>
+      </div>
+      
+      <div class="job-viewer-body">
+        <div class="jv-loader" id="jv-loader">
+          <div class="spinner"></div>
+          <p>Extracting raw data...</p>
+        </div>
+        <div id="jv-content" class="jv-native-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="api-config.js"></script>
+  <script src="app.js"></script>
+  <script src="revenue.js"></script>
+  <script>
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Global toast
+    function showToast(msg, type = 'success') {
+      const tc = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = msg;
+      tc.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3000);
+    }
+    window.showToast = showToast;
+  </script>
+</body>
+</html>
