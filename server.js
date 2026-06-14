@@ -53,8 +53,8 @@ app.get('/api/scrape', async (req, res) => {
       }
     });
 
-    // Normalize all elements to create a proper single format
-    $('*').removeAttr('style').removeAttr('width').removeAttr('height').removeAttr('bgcolor').removeAttr('color').removeAttr('align').removeAttr('valign');
+    // Normalize all elements to create a proper single format (strip classes, IDs, inline styles)
+    $('*').removeAttr('class').removeAttr('id').removeAttr('style').removeAttr('width').removeAttr('height').removeAttr('bgcolor').removeAttr('color').removeAttr('align').removeAttr('valign');
 
     let contentHtml = '';
 
@@ -143,11 +143,33 @@ app.get('/api/scrape', async (req, res) => {
         .replace(/indgovtjobs/gi, 'SarkariSphere');
     }
 
+    // Graceful fallback if no content was found but request succeeded
+    if (!contentHtml || contentHtml.trim().length < 50) {
+      contentHtml = `
+        <div style="text-align:center; padding: 40px; font-family: sans-serif;">
+          <h3 style="color: #d32f2f; margin-bottom: 15px;">Job Details Not Available in Viewer</h3>
+          <p style="color: #555; margin-bottom: 20px;">This job post uses a complex layout that cannot be formatted properly, or it requires bot verification.</p>
+          <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #1a237e; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+            View Full Job Details Directly
+          </a>
+        </div>
+      `;
+    }
+
     res.json({ html: contentHtml });
 
   } catch (error) {
     console.error('Scraping Error for', targetUrl, ':', error.message);
-    res.status(500).json({ error: 'Failed to extract content', message: error.message });
+    const fallbackHtml = `
+      <div style="text-align:center; padding: 40px; font-family: sans-serif;">
+        <h3 style="color: #d32f2f; margin-bottom: 15px;">Bot Protection Enabled</h3>
+        <p style="color: #555; margin-bottom: 20px;">The official source website has blocked our automated scraper.</p>
+        <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #1a237e; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+          View Job Details Directly
+        </a>
+      </div>
+    `;
+    res.json({ html: fallbackHtml });
   }
 });
 
