@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sarkarisphere.netlify.app/sitemap.xml

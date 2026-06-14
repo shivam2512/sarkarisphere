@@ -473,24 +473,26 @@ const App = {
     // Share our own web URL instead of the scraped source URL
     const shareUrl = window.location.origin + window.location.pathname;
 
+    const viralText = `🔥 *New Sarkari Job Alert*\n\n📌 *${title}*\n\n👉 Apply & Details: ${shareUrl}\n\n📢 Join our WhatsApp group for fast updates!`;
+
     // Option 1: Native share sheet (works on HTTPS mobile)
     if (navigator.share) {
-      navigator.share({ title, url: shareUrl })
+      navigator.share({ title: title, text: viralText, url: shareUrl })
         .then(() => window.showToast?.('Shared successfully!', 'success'))
-        .catch(() => this._copyFallback(shareUrl));
+        .catch(() => this._copyFallback(viralText));
       return;
     }
 
     // Option 2: Clipboard API (works on HTTPS desktop/mobile)
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(shareUrl)
-        .then(() => window.showToast?.('Link copied to clipboard!', 'success'))
-        .catch(() => this._copyFallback(shareUrl));
+      navigator.clipboard.writeText(viralText)
+        .then(() => window.showToast?.('Message copied! Paste in WhatsApp.', 'success'))
+        .catch(() => this._copyFallback(viralText));
       return;
     }
 
     // Option 3: execCommand fallback (works on HTTP — local network testing)
-    this._copyFallback(shareUrl);
+    this._copyFallback(viralText);
   },
 
   _copyFallback(text) {
@@ -507,7 +509,7 @@ const App = {
     document.body.removeChild(el);
 
     if (success) {
-      window.showToast?.('Link copied to clipboard!', 'success');
+      window.showToast?.('Message copied! Paste in WhatsApp.', 'success');
     } else {
       // Last resort: show a native prompt so user can manually copy
       window.prompt('Copy this link:', text);
